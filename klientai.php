@@ -1,3 +1,7 @@
+<?php include "functions.php";  ?>
+<?php session_start(); ?>
+<?php addClient(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,40 +17,44 @@
 <body>
     <div class="container">
     <!-- 1 eilute su 5 -->
-    <table class="table table-striped">
-        <tr>
-            <th>Eil nr.</th>
-            <th>Vardas</th>
-            <th>Pavardė</th>
-            <th>Amžius</th>
-            <th>Miestas</th>
-        </tr>
-                <?php 
-            
-            //Visus klientus atvaizduoti lenteleje(table)
-            
-            //viska turime nuskaityti is failo ir dekoduoti is json x
-            // 1 tr eilute = 1 klientas
-            //turime atvaizduoti tiek <tr> kiek klientu yra faile
-            //musu failas yra asociatyvus masyvas
-            //vadinasi galime naudoti foreach funkcija
+    <!-- Kaip prideti nauja klienta i faila per forma pasinaudojant funkciniu budu -->
 
-            $klientai = json_decode(file_get_contents("klientai.json"), true);
-            
-            foreach($klientai as $klientas) {
-                echo "<tr>";
-                    echo "<td>0</td>";
-                    echo "<td>".$klientas["vardas"]."</td>";
-                    echo "<td>".$klientas["pavarde"]."</td>";
-                    echo "<td>".$klientas["amzius"]."</td>";
-                    echo "<td>".$klientas["miestas"]."</td>";
-                    
-                echo "</tr>";
-            }
-            ?>
-    </table>
+        <div class="row">
+            <div class="col-lg-4">
+                <form method="post" action="klientai.php">
+                    <div class="form-group">
+                        <label for="vardas">Vardas</label>
+                        <input type="text" class="form-control" id="vardas" name="vardas">
+                    </div>
+                    <div class="form-group">
+                        <label for="pavarde">Pavarde</label>
+                        <input type="text" class="form-control" id="pavarde" name="pavarde">
+                    </div>
+                    <div class="form-group">
+                        <label for="amzius">Amzius</label>
+                        <input type="text" class="form-control" id="amzius" name="amzius">
+                    </div>
+                    <div class="form-group">
+                        <label for="miestas">Miestas</label>
+                        <input type="text" class="form-control" id="miestas" name="miestas">
+                    </div>
+                    <button type="submit" class="btn btn-primary" name="addClient">Add Client</button>
+                </form>
+            </div
+        </div>
 
-    
+        <?php showMessage(); ?>
+        <table class="table table-striped">
+            <tr>
+                <th>Eil nr.</th>
+                <th>Vardas</th>
+                <th>Pavardė</th>
+                <th>Amžius</th>
+                <th>Miestas</th>
+            </tr>
+            <?php getClients(); ?>
+        </table>
+
     
     </div>
 </body>
