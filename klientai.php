@@ -1,6 +1,8 @@
 <?php include "functions.php";  ?>
 <?php session_start(); ?>
 <?php addClient(); ?>
+<?php deleteClient(); ?>
+<?php updateClient(); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,11 +53,15 @@
                 <th>Pavardė</th>
                 <th>Amžius</th>
                 <th>Miestas</th>
+                <th>Veiksmai</th>
             </tr>
             <?php getClients(); ?>
         </table>
 
-    
+    <!-- 1. kaip atvirkstine tvarka atvaizduoti id? x -->
+    <!-- 2. neveikia sesijos zinute x
+I just solved my problem by adding exit after redirecting user to escape the execution of the register page, so the session won't be unset in the current page before using it in the next page.
+--> 
     </div>
 </body>
 </html>
