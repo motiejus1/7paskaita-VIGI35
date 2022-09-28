@@ -131,6 +131,15 @@ function sortClients($klientai) {
         krsort($klientai);
     }
 
+    if(isset($_GET["sortOrder"]) && $_GET["sortOrder"] == "RAND") {
+        
+        //nesumaiso masyvo indeksu
+        //kad sumaisytu su indeksais
+        shuffle($klientai);
+    }
+
+
+
     return $klientai;
 }
 //jjinai gauna kaip parametra nefiltruota masyva
@@ -161,9 +170,8 @@ function pagination() {}
 //void tuscia
 function getClients() {
     $klientai = readJson("klientai.json");
-    //$klientai = sortClients($klientai);
-
-    $klientai = filterClients($klientai);
+    $klientai = sortClients($klientai);
+    //$klientai = filterClients($klientai);
 
     foreach($klientai as  $i => $klientas) {
         echo "<tr>";
