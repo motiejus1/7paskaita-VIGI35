@@ -82,7 +82,21 @@
                    
                     <button type="submit" class="btn btn-primary" name="sort">Rikiuoti</button>
                 </form>
-            </div
+                            </div>
+            <div class="col-lg-4">
+            <form method="get" action="klientai.php">                    
+                    <div class="form-group">
+                        <label for="pavarde">Filtras</label>
+                        <select class="form-select" name="miestas">
+                            <option value="visi">Visi</option>
+                            <?php getCities(); ?>
+                        </select>   
+                    </div>
+                   
+                    <button type="submit" class="btn btn-primary" name="filter">Filtruoti</button>
+                </form>
+                <a href="klientai.php" class="btn btn-primary">Valyti filtra</a>                 
+            </div>                    
         </div>
 
         <?php showMessage(); ?>

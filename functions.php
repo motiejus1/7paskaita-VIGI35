@@ -54,7 +54,7 @@ function getCollumns() {
 
     foreach($collumms as $collumn) {
 
-        if(isset($_GET["selectCollumn"]) && $collumn == $_GET["selectCollumn"]) {
+        if(isset($_GET["sortCollumn"]) && $collumn == $_GET["sortCollumn"]) {
             echo "<option value='$collumn' selected>$collumn</option>";
         } else {
             echo "<option value='$collumn'>$collumn</option>";
@@ -63,14 +63,28 @@ function getCollumns() {
     }
 }
 
-//void tuscia
-function getClients() {
+function getCities() {
     $klientai = readJson("klientai.json");
-    
+    $cities = [];
 
-    //ksort ir krsort pagal kliento id rikiuoti didejimo arba mazejimo tvarka
+    foreach ($klientai as $klientas) {
+        $cities[] = $klientas["miestas"];
+    }
 
+    $cities=array_unique($cities);
 
+    foreach($cities as $key=>$city) {
+        if(isset($_GET["miestas"]) && $city == $_GET["miestas"]) {
+            echo "<option value='$city' selected>$city</option>";
+        } else {
+            echo "<option value='$city'>$city</option>";
+        }
+    }
+
+}
+//jinai gauna kaip parametra nerikiuota masyva
+//ir grazina rikiuota masyva
+function sortClients($klientai) {
     if(isset($_GET["sortCollumn"]) && isset($_GET["sortOrder"])) {
         $sortCollumn = $_GET["sortCollumn"];
         $sortOrder = $_GET["sortOrder"];
@@ -117,17 +131,39 @@ function getClients() {
         krsort($klientai);
     }
 
-   //a,b,c ,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
-   //ASCII reiksmes
-   //1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26    
+    return $klientai;
+}
+//jjinai gauna kaip parametra nefiltruota masyva
+//ir grazina filtruota masyva
+function filterClients($klientai) {
 
-    //rikiuosime pagal varda mazejimo tvarka(DESC)
+    $miestas = "visi";
 
-    
-    //bevarde funkcija nemato kintamuju is virsaus
-   
-    //bevarde funkcija nemato kintamuju is apacios
+    if(isset($_GET["miestas"])) {
+        $miestas = $_GET["miestas"];
+    }
 
+    $klientai=array_filter($klientai,function($klientas) use($miestas) {
+        if($miestas == "visi") {
+            return true;
+        } else if ($klientas["miestas"] == $miestas) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    //filtruojame duomenis pagal miesta
+    return $klientai;
+}
+
+
+function pagination() {}
+//void tuscia
+function getClients() {
+    $klientai = readJson("klientai.json");
+    //$klientai = sortClients($klientai);
+
+    $klientai = filterClients($klientai);
 
     foreach($klientai as  $i => $klientas) {
         echo "<tr>";
