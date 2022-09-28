@@ -42,6 +42,46 @@
                     </div>
                     <button type="submit" class="btn btn-primary" name="addClient">Add Client</button>
                 </form>
+            </div>
+
+            <div class="col-lg-4">
+                <form method="get" action="klientai.php">
+                    <div class="form-group">
+                        <label for="vardas">Rikiavimo stulpelis</label>
+                        <select class="form-select" name="sortCollumn">
+                            <option value="id">ID</option>
+                           <?php  getCollumns(); ?>
+                        </select>    
+                    </div>
+                    <div class="form-group">
+                        <label for="pavarde">Rikiavimo tvarka</label>
+                        <select class="form-select" name="sortOrder">
+
+                            <?php 
+                                $a = 1;
+                                $b = 2;
+
+                                if($a>$b){
+                                   // echo "a didesnis uz b";
+                                } else    {
+                                   // echo "b didesnis uz a";
+                                }
+                                //Pries klaustuka salyga
+                                //tarp klaustuko ir dvitaskio veiksmas kuri turim atlikti jei salyga true
+                                //veiksmas uz dvitaskio - else veiksmas
+                              //  echo (($a>$b)?$ats="a didesnis uz b":$ats="b didesnis uz a");
+                            
+                            ?>
+
+
+                            <option value="ASC" <?php echo (isset($_GET["sortOrder"]) && $_GET["sortOrder"]=="ASC"? "selected": ""); ?>>ASC</option>
+                            <option value="DESC" <?php echo (isset($_GET["sortOrder"]) && $_GET["sortOrder"]=="DESC"? "selected": ""); ?>>DESC</option>
+                            <option value="RAND" <?php echo (isset($_GET["sortOrder"]) && $_GET["sortOrder"]=="RAND"? "selected": ""); ?>>RAND</option>
+                        </select>   
+                    </div>
+                   
+                    <button type="submit" class="btn btn-primary" name="sort">Rikiuoti</button>
+                </form>
             </div
         </div>
 

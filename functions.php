@@ -47,11 +47,86 @@ function showMessage() {
     } 
 }
 
+function getCollumns() {
+    $klientai = readJson("klientai.json");
+    $klientas = $klientai[0];
+    $collumms = array_keys($klientas);
+
+    foreach($collumms as $collumn) {
+
+        if(isset($_GET["selectCollumn"]) && $collumn == $_GET["selectCollumn"]) {
+            echo "<option value='$collumn' selected>$collumn</option>";
+        } else {
+            echo "<option value='$collumn'>$collumn</option>";
+        }
+       
+    }
+}
+
 //void tuscia
 function getClients() {
     $klientai = readJson("klientai.json");
     
-    krsort($klientai);
+
+    //ksort ir krsort pagal kliento id rikiuoti didejimo arba mazejimo tvarka
+
+
+    if(isset($_GET["sortCollumn"]) && isset($_GET["sortOrder"])) {
+        $sortCollumn = $_GET["sortCollumn"];
+        $sortOrder = $_GET["sortOrder"];
+        if($sortCollumn == "id") {
+        //ASC ir DESC
+            if($sortOrder == "ASC") {
+                ksort($klientai);
+            } else if($sortOrder == "DESC") {
+                krsort($klientai);
+            }
+            //uasort funkcija
+            // teksto rikiavimas
+
+
+        } else {
+
+            $order = [-1, 1]; //ASC
+        
+            if ($sortOrder == "DESC") {
+                $order = [1, -1]; //DESC
+            }
+
+            uasort($klientai, function($dabartinis, $busimas) use($sortCollumn, $order) {    
+                //$sordOrder = ASC    -1 1
+                //$sortOrder = DESC   1 -1
+        
+               // $order = [-1, 1]; //ASC
+        
+                //if ($sortOrder == "DESC") {
+                //    $order = [1, -1]; //DESC
+                //}
+                
+                if($dabartinis[$sortCollumn] == $busimas[$sortCollumn]) {
+                    return 0;
+                } else if($dabartinis[$sortCollumn] < $busimas[$sortCollumn]) {
+                    return $order[0];
+                } else {
+                    return $order[1];
+                }
+            });
+        }        
+    } else {
+        //pagal id mazejimo tvarka
+        krsort($klientai);
+    }
+
+   //a,b,c ,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+   //ASCII reiksmes
+   //1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26    
+
+    //rikiuosime pagal varda mazejimo tvarka(DESC)
+
+    
+    //bevarde funkcija nemato kintamuju is virsaus
+   
+    //bevarde funkcija nemato kintamuju is apacios
 
 
     foreach($klientai as  $i => $klientas) {
