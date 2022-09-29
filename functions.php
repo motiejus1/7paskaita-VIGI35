@@ -170,8 +170,15 @@ function pagination() {}
 //void tuscia
 function getClients() {
     $klientai = readJson("klientai.json");
+    //neveikia
     $klientai = sortClients($klientai);
-    //$klientai = filterClients($klientai);
+    $klientai = filterClients($klientai);
+
+    //a)Sujungti filtravimo ir rikiavimo formas
+    // visi kintamieji nueina i nuoroda ir juos galima pasiimti per GET
+    // ir suveikia tiek sortClients tiek filterClients
+    //b) musu formos gali likti atskiros, taciau jos turi tureti
+    //pasleptus input laukelius su kitos formos informacija
 
     foreach($klientai as  $i => $klientas) {
         echo "<tr>";
@@ -238,5 +245,43 @@ function updateClient() {
 //rikiuoti klientus
 
 //filtruoti klientus
+//puslapiavimas
+
+
+function rikiuok($masyvas) {
+    rsort($masyvas); //reverse sort - atvirkstine tvarka
+    return $masyvas;
+}
+
+function filtruok($masyvas) {
+    //array_filter
+    $masyvas = array_filter($masyvas, function($elementas){
+        if($elementas % 2 == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    
+    return $masyvas;
+}
+
+
+function pavyzdys() {
+    $masyvas = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20);
+    var_dump($masyvas);
+    
+
+//filtravimo uzdavinys - atrinkti tik lyginius skaicius
+    $masyvas = filtruok($masyvas);
+    var_dump($masyvas);
+
+    //rikiavimo uzdavinys - surikiuoti atvirkstine tvarka
+    //20 iki 1 (DESC)
+    $masyvas = rikiuok($masyvas);
+
+    var_dump($masyvas);
+    
+}
 
 ?>
