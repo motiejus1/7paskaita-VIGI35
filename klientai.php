@@ -103,7 +103,7 @@
         </div>
 
         <?php showMessage(); ?>
-        <table class="table table-striped">
+        <table class="table table-striped d-none">
             <tr>
                 <th>Eil nr.</th>
                 <th>Vardas</th>
@@ -114,7 +114,11 @@
             </tr>
             <?php getClients(); ?>
         </table>
-        <?php pavyzdys(); ?>                        
+          <?php masyvoPjaustymas(); ?>                      
+        <ul class="pagination">
+            <?php pagination(); ?>                     
+        </ul>
+        <?php //pavyzdys(); ?>                        
     <!-- 1. kaip atvirkstine tvarka atvaizduoti id? x -->
     <!-- 2. neveikia sesijos zinute x
 I just solved my problem by adding exit after redirecting user to escape the execution of the register page, so the session won't be unset in the current page before using it in the next page.

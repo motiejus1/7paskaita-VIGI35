@@ -166,7 +166,24 @@ function filterClients($klientai) {
 }
 
 
-function pagination() {}
+function pagination() {
+    $klientai = readJson("klientai.json");
+    $kiek = count($klientai);//klientu kieki
+    $irasaiPerPuslapi = 15;//kiek irasu bus rodoma viename puslapyje
+
+    //ceil(lubos) - apvalina visalaika i didesne puse
+    //floor(grindys) - apvalina visalaika i mazesne puse
+    
+    // ceil(46/ 15) = 3.11111 = 4
+    // floor(46/15) = 3.11111 = 3
+    $puslapiuKiekis = ceil($kiek/$irasaiPerPuslapi);
+
+    for($i=1;$i<$puslapiuKiekis+1;$i++) {
+       echo "<li class='page-item'><a class='page-link' href='klientai.php?page=$i'>$i</a></li>";
+    }
+
+    //var_dump($puslapiuKiekis);
+}
 //void tuscia
 function getClients() {
     $klientai = readJson("klientai.json");
@@ -282,6 +299,28 @@ function pavyzdys() {
 
     var_dump($masyvas);
     
+}
+
+//array_slice - funkcija, kuri atrenka masyvo dali pagal nurodyta kriteriju
+
+function masyvoPjaustymas() {
+    $masyvas = array(1,2,3,4,5,6,7,8,9,10,11);
+    //masyvas, nuo kurios vietos norime imti duomenis, kiek duomenu norime paimti, ar norime isaugoti sena indeksa(true)
+    //nuo pasirinkto puslapio 3, man atvaizduoja duomenis
+
+    $page = $_GET["page"];
+    $irasuKiekisPuslapyje = 2;
+    $offset = ($page * $irasuKiekisPuslapyje) - $irasuKiekisPuslapyje;
+
+    $dinaminisPuslapis = array_slice($masyvas,$offset,$irasuKiekisPuslapyje, true);
+
+    var_dump($dinaminisPuslapis);
+    $pirmasPuslapis = array_slice($masyvas,0,2, true); // (1 * 2) - 2 = 0
+    // var_dump($pirmasPuslapis);
+    $antrasPuslapis = array_slice($masyvas,2,2, true); //  (2 * 2) - 2 = 2
+    // var_dump($antrasPuslapis);
+    $treciasPuslapis = array_slice($masyvas,4,2, true); // ($page * $irasuKiekisPuslapyje) - irasuKiekisPuslapyje = 4
+    // var_dump($treciasPuslapis);
 }
 
 ?>
