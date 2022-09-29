@@ -102,8 +102,19 @@
             </div>                    
         </div>
 
+        <div class="row">
+            <div class="col-lg-2">
+                <form method="get" action="klientai.php">
+                    <select class="form-select" name="limit">
+                            <?php limitValues(); ?>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Irasu kiekis</button>    
+                </form>
+            </div>
+        </div>    
+
         <?php showMessage(); ?>
-        <table class="table table-striped d-none">
+        <table class="table table-striped">
             <tr>
                 <th>Eil nr.</th>
                 <th>Vardas</th>
@@ -114,11 +125,13 @@
             </tr>
             <?php getClients(); ?>
         </table>
-          <?php masyvoPjaustymas(); ?>                      
-        <ul class="pagination">
-            <?php pagination(); ?>                     
-        </ul>
-        <?php //pavyzdys(); ?>                        
+        <div class="row">
+        <?php if((isset($_GET["limit"]) && $_GET["limit"] != "visi") || !isset($_GET["limit"])) { ?>   
+            <?php pagination(); ?> 
+        <?php  } ?>
+    </div>                     
+                              
+                              
     <!-- 1. kaip atvirkstine tvarka atvaizduoti id? x -->
     <!-- 2. neveikia sesijos zinute x
 I just solved my problem by adding exit after redirecting user to escape the execution of the register page, so the session won't be unset in the current page before using it in the next page.

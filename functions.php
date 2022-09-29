@@ -165,31 +165,104 @@ function filterClients($klientai) {
     return $klientai;
 }
 
-
+//puslapiu mygtuku atvaizdavimas
 function pagination() {
+    
     $klientai = readJson("klientai.json");
     $kiek = count($klientai);//klientu kieki
     $irasaiPerPuslapi = 15;//kiek irasu bus rodoma viename puslapyje
+
+    if(isset($_GET["limit"])) {
+        $irasaiPerPuslapi = $_GET["limit"];
+    }
+
+    $page = 1;
+    if(isset($_GET["page"])) {
+        $page = $_GET["page"];
+    }
 
     //ceil(lubos) - apvalina visalaika i didesne puse
     //floor(grindys) - apvalina visalaika i mazesne puse
     
     // ceil(46/ 15) = 3.11111 = 4
     // floor(46/15) = 3.11111 = 3
-    $puslapiuKiekis = ceil($kiek/$irasaiPerPuslapi);
 
+
+    $puslapiuKiekis = ceil($kiek/$irasaiPerPuslapi);
+    echo "<span>Jūs esate $page iš $puslapiuKiekis </span>";
+    echo "<ul class='pagination'>";
     for($i=1;$i<$puslapiuKiekis+1;$i++) {
-       echo "<li class='page-item'><a class='page-link' href='klientai.php?page=$i'>$i</a></li>";
+        if($i==$page) {
+            echo "<li class='page-item active'><a class='page-link' href='klientai.php?page=$i&limit=$irasaiPerPuslapi'>$i</a></li>";
+        } else {
+            echo "<li class='page-item'><a class='page-link' href='klientai.php?page=$i&limit=$irasaiPerPuslapi'>$i</a></li>";
+        }
+       
     }
+    echo "</ul>";
+
+
+    
 
     //var_dump($puslapiuKiekis);
+}
+
+//irasu nukarpymas
+
+function limitValues() {
+    $limitValues = array(
+        "15" => "15",
+        "30" => "30",
+        "45" => "45",
+        "visi" => "Visi"
+    );
+
+    foreach ($limitValues as $key => $value) {
+        if(isset($_GET["limit"]) && $key == $_GET["limit"]) {
+            echo "<option value='$key' selected>$value</option>";
+        } else {
+            echo "<option value='$key'>$value</option>";
+        }
+    }
+}
+
+
+
+function paginate($klientai) {
+    $page = 1;
+    if(isset($_GET["page"])){
+        $page = $_GET["page"];
+    }
+
+    $kiek = count($klientai);
+    $irasuKiekisPuslapyje = 15;
+
+    if(isset($_GET["limit"])) {
+        $irasaiPerPuslapi = $_GET["limit"];
+    }
+
+    $puslapiuKiekis = ceil($kiek/$irasuKiekisPuslapyje );
+
+    if($puslapiuKiekis < $page || $page < 1) {
+        $page = 1;
+    }
+
+    $offset = ($page * $irasuKiekisPuslapyje) - $irasuKiekisPuslapyje;
+
+    $klientai = array_slice($klientai,$offset,$irasuKiekisPuslapyje, true);
+    return $klientai;
 }
 //void tuscia
 function getClients() {
     $klientai = readJson("klientai.json");
-    //neveikia
+    
     $klientai = sortClients($klientai);
     $klientai = filterClients($klientai);
+
+    if((isset($_GET["limit"]) && $_GET["limit"] != "visi") || !isset($_GET["limit"])) {
+        $klientai = paginate($klientai);    
+    }  
+
 
     //a)Sujungti filtravimo ir rikiavimo formas
     // visi kintamieji nueina i nuoroda ir juos galima pasiimti per GET
